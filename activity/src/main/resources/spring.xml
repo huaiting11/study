@@ -13,10 +13,10 @@
     </bean>
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-        <property name="driverClassName" value="${db.driverClassName}"/>
-        <property name="url" value="${db.url}"/>
-        <property name="username" value="${db.username}"/>
-        <property name="password" value="${db.password}"/>
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
         <property name="initialSize" value="3"/>
         <property name="minIdle" value="3"/>
         <property name="maxActive" value="20"/>
@@ -41,19 +41,13 @@
     <!--使用基于注解方式配置事务 -->
     <tx:annotation-driven transaction-manager="txManager" />
 
-    <!-- activiti事务管理 -->
-    <bean id="transactionManager"
-          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
-
     <!-- 加载activiti引擎 -->
     <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
         <property name="processEngineConfiguration" ref="processEngineConfiguration" />
     </bean>
     <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
         <property name="dataSource" ref="dataSource" />
-        <property name="transactionManager" ref="transactionManager" />
+        <property name="transactionManager" ref="txManager" />
         <property name="databaseSchemaUpdate" value="true" />
         <property name="jobExecutorActivate" value="false" />
         <property name="databaseType" value="mysql" />

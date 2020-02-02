@@ -8,7 +8,7 @@ public class Test01 {
     public void test(){
 
         // 加载配置文件
-        ProcessEngine processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.xml").buildProcessEngine();
+        ProcessEngine processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("spring.xml","processEngineConfiguration").buildProcessEngine();
         RepositoryService repositoryService = processEngine.getRepositoryService();
         RuntimeService runtimeService = processEngine.getRuntimeService();
         repositoryService.createDeployment().addClasspathResource("Interview.bpmn").deploy();
