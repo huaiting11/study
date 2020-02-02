@@ -1,0 +1,47 @@
+ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+
+RuntimeService runtimeService = processEngine.getRuntimeService();
+RepositoryService repositoryService = processEngine.getRepositoryService();
+TaskService taskService = processEngine.getTaskService();
+ManagementService managementService = processEngine.getManagementService();
+IdentityService identityService = processEngine.getIdentityService();
+HistoryService historyService = processEngine.getHistoryService();
+FormService formService = processEngine.getFormService();
+
+2.1 RepositoryService
+是Activiti的仓库服务类。所谓的仓库指流程定义文档的两个文件：bpmn文件和流程图片。
+1)     产生方式
+processEngine.getRepositoryService()//流程定义和部署对象相关的service
+2)     可以产生DeploymentBuilder，用来定义流程部署的相关参数
+processEngine.getRepositoryService().createDeployment().addClasspathResource("Interview.bpmn").deploy()
+3)     删除流程定义
+Deployment deployment=	processEngine.getRepositoryService()//流程定义和部署对象相关的service
+		.deleteDeployment(deploymentId)
+
+2.2 RuntimeService 流程服务类
+1） 启动流程实例
+ProcessInstance processInstance =  processEngine.getRuntimeService()//与正在执行的流程实例和执行对象相关的service
+		.startProcessInstanceByKey("key");//使用流程定义Key启动，key对应bpmn文件中的id，key启动默认是最新版本的流程定义
+2）查看流程是否结束
+ProcessInstance processInstance =  processEngine.getRuntimeService()//正在执行的流程
+		.createProcessInstanceQuery()//创建流程实例查询对象
+		.processInstanceId("流程实例ID")
+		.singleResult();
+		//如果为空，流程已结束
+		if(processInstance==null){
+		   	System.out.println("流程已结束");
+		}else{
+			System.out.println("流程未结束");
+        }
+2.3 TaskService 任务服务类
+1）任务相关操作
+List<Task> list = processEngine.getTaskService()//与正在执行任务相关的service
+		.createTaskQuery()//创建任务查询对象
+		.taskAssignee("当前处理人")
+		.list();
+2）完成任务
+processEngine.getTaskService()//任务相关service
+		.complete("108");
+		System.out.println("---任务已完成---");
+2.4 HistoryService 关于历史数据查询
+ 1）查询历史流程实例
