@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：命名空间，对sql进行一个分类管理 -->
+<!-- 注意：namespace在mapper代理时，具有重要且特殊的作用
+    对应mapper接口的全限定名
+-->
+
+<!--mybatis映射配置文件-->
+<mapper namespace="mapper.BookMapper">
+    <select id="getById" parameterType="Integer" resultType="book">
+        select * from book where id= #{id}
+    </select>
+    <update id="decLeft" parameterType="Integer">
+        update book set `left` = `left` -1 where id = #{id}
+    </update>
+</mapper>

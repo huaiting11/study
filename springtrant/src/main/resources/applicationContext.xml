@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="service" />
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:db.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="jdbcUrl" value="${db.url}"></property>
+        <property name="driverClass" value="${db.driver}"></property>
+        <property name="user" value="${db.user}"></property>
+        <property name="password" value="${db.pw}"></property>
+    </bean>
+    <!--整合 mybatis-->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--指定mybatis的全局配置文件-->
+        <property name="configLocation" value="classpath:SqlMapConfig.xml"></property>
+       <property name="mapperLocations" value="classpath*:mapper/*.xml"></property>
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--配置扫描器 将mybatis接口实现加入到ioc容器中-->
+  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="mapper" ></property>
+    </bean>
+    <!--事务控制 为了便于管理数据库-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--配置数据源-->
+        <property name="dataSource" ref="dataSource"/>
+
+    </bean>
+    <!--开启基于注解的事务 或者是xml配置事务-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!--配置一个可以批量执行的sqlSession-->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sessionFactory"/>
+        <constructor-arg name="executorType" value="BATCH"/>
+    </bean>
+
+
+</beans>
