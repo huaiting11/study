@@ -184,7 +184,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <version>2.7</version>
         </dependency>
         <!-- spring MVC 在转换为web项目后添加的begin -->
         <!-- javaee-api包 注意和项目使用的JDK版本对应 -->
